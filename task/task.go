@@ -1,10 +1,10 @@
 package task
 
-import "time"
-
-type CRUD interface {
-	AddTask()
-}
+import (
+	"errors"
+	"fmt"
+	"time"
+)
 
 type Status string
 
@@ -14,22 +14,56 @@ const (
 	Finished   Status = "Finished"
 )
 
-type Priority string
-
-const (
-	Low    Priority = "Low"
-	Medium Priority = "Medium"
-	High   Priority = "High"
-)
-
 type Task struct {
 	id          int
 	title       string
 	description string
 	status      Status
-	priority    Priority
 	createdAt   time.Time
 	updatedAt   time.Time
 }
 
-fmt.print
+type Tasks []Task
+
+func (tasks *Tasks) createTask(title string, description string) error {
+	task := Task{
+		id:          0,
+		title:       title,
+		description: description,
+		status:      "TODO",
+		createdAt:   time.Now(),
+		updatedAt:   time.Now(),
+	}
+
+	*tasks = append(*tasks, task)
+
+	return nil
+}
+
+func (tasks *Tasks) IsValidationTask(index int) error {
+	if index == 0 || index > len(*tasks) {
+		err := errors.New("Now Validate for Tasks")
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (tasks *Tasks) DeleteTask(index int) error {
+	t := *tasks
+	if error := t.IsValidationTask(index); error != nil {
+		fmt.Println(error)
+		return error
+	}
+	*tasks = append(t[:index], t[:index-1]...)
+	return nil
+}
+
+func (tasks *Tasks) UpdateStatusTask(index int) error {
+	t := *tasks
+	if error := t.IsValidationTask(index); error != nil {
+		fmt.Println(error)
+		return error
+	}
+}
