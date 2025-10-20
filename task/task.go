@@ -31,3 +31,5 @@ type Task struct {
 	createdAt   time.Time
 	updatedAt   time.Time
 }
+
+fmt.print
